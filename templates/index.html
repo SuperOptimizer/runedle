@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Old Norse Wordle</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #game-board { display: inline-block; }
+        .row { display: flex; margin-bottom: 5px; }
+        .cell { width: 50px; height: 50px; border: 1px solid #ccc; margin-right: 5px; display: flex; justify-content: center; align-items: center; font-size: 24px; }
+        #rune-buttons { margin-top: 20px; }
+        button { font-size: 18px; margin: 2px; }
+    </style>
+</head>
+<body>
+    <h1>Old Norse Wordle</h1>
+    <div id="game-board"></div>
+    <div id="rune-buttons"></div>
+    <button id="submit-guess">Submit Guess</button>
+
+    <script>
+        const runes = "{{ runes }}";
+        let currentRow = 0;
+        let currentGuess = "";
+
+        function createGameBoard() {
+            const gameBoard = document.getElementById('game-board');
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('div');
+                row.className = 'row';
+                for (let j = 0; j < 5; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    row.appendChild(cell);
+                }
+                gameBoard.appendChild(row);
+            }
+        }
+
+        function createRuneButtons() {
+            const runeButtons = document.getElementById('rune-buttons');
+            for (let rune of runes) {
+                const button = document.createElement('button');
+                button.textContent = rune;
+                button.onclick = () => addRune(rune);
+                runeButtons.appendChild(button);
+            }
+        }
+
+        function addRune(rune) {
+            if (currentGuess.length < 5) {
+                currentGuess += rune;
+                updateGameBoard();
+            }
+        }
+
+        function updateGameBoard() {
+            const cells = document.querySelectorAll('.row')[currentRow].children;
+            for (let i = 0; i < 5; i++) {
+                cells[i].textContent = i < currentGuess.length ? currentGuess[i] : '';
+            }
+        }
+
+        function submitGuess() {
+            if (currentGuess.length !== 5) return;
+
+            fetch('/guess', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({guess: currentGuess})
+            })
+            .then(response => response.json())
+            .then(data => {
+                const cells = document.querySelectorAll('.row')[currentRow].children;
+                for (let i = 0; i < 5; i++) {
+                    cells[i].style.backgroundColor = data.result[i];
+                }
+                currentRow++;
+                currentGuess = "";
+                if (currentRow >= 6 || data.result.every(color => color === 'green')) {
+                    alert('Game Over!');
+                }
+            });
+        }
+
+        createGameBoard();
+        createRuneButtons();
+        document.getElementById('submit-guess').onclick = submitGuess;
+    </script>
+</body>
+</html>
