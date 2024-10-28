@@ -768,6 +768,7 @@ for latinword in LATIN_WORDS:
 			if latinword[i + 1] == 'i':
 				runic_word.append('ᛅ')
 			else:
+				#TODO: actually select ár or íss correctly here
 				runic_word.append('ᛁ')
 		elif c == 'f':
 			runic_word.append('ᚠ')
