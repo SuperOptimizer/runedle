@@ -817,8 +817,10 @@ for latinword in LATIN_WORDS:
       if runic_word[i] == runic_word[i+1]:
         break
     else:
-      print(f"'{latinword}':'{''.join(runic_word)}'")
-      runic_words.append(''.join(runic_word))
+      runicword = ''.join(runic_word)
+      if runicword not in runic_words:
+        print(f"'{latinword}':'{runicword}'")
+        runic_words.append(runicword)
 
 word_mapping = {
 'ábóti':'ᛅᛒᚢᛏᛁ'
