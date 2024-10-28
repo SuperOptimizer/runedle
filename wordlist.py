@@ -757,7 +757,7 @@ runic_word = ""
 for latinword in LATIN_WORDS:
     runic_word = []
     for i,c in enumerate(latinword):
-        if c == 'á' or c == 'a' or c == 'ǽ' or c == 'é':
+        if c == 'á' or c == 'a' or c == 'ǽ' or c == 'é' or c == 'ǫ' or c == 'æ':
             #todo: select áss or ár correctly
             runic_word.append('ᛅ')
         elif c == 'b':
@@ -791,7 +791,7 @@ for latinword in LATIN_WORDS:
               if latinword[i+1] in ['k','g','t','d']:
                 continue
             runic_word.append('ᚾ')
-        elif c == 'o' or c == 'ǫ' or c == 'ó' or c == 'y' or c == 'ý' or c == 'ǿ' or c == 'ø':
+        elif c == 'o' or c == 'ó' or c == 'y' or c == 'ý' or c == 'ǿ' or c == 'ø':
             runic_word.append('ᚢ')
         elif c == 'p':
             runic_word.append('ᛒ')
